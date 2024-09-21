@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
@@ -23,6 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.jetpack_composetry.ui.theme.JetPack_ComposetryTheme
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.saveable.rememberSaveable
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +42,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApp(modifier: Modifier = Modifier) {
 
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
+    //オンボーディング画面の状態の維持
+    //個々の状態が保存され、構成の変更（回転など）やプロセスの終了後も保持される。
+    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
 
     Surface(modifier) {
         if (shouldShowOnboarding) {
@@ -73,10 +79,10 @@ fun OnboardingScreen(
 @Composable
 private fun Greetings(
     modifier: Modifier = Modifier,
-    names: List<String> = listOf("World", "Compose")
+    names: List<String> = List(1000) { "$it" } //1000個のレイアウトを表示
 ) {
-    Column(modifier = modifier.padding(vertical = 4.dp)) {
-        for (name in names) {
+    LazyColumn(modifier = modifier.padding(vertical = 4.dp)) {
+        items(items = names) { name ->
             Greeting(name = name)
         }
     }
@@ -93,7 +99,8 @@ fun OnboardingPreview() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
 
-    var expanded by remember { mutableStateOf(false) }
+    //リストアイテムの展開済み状態の維持
+    var expanded by rememberSaveable { mutableStateOf(false) }
 
     val extraPadding = if (expanded) 48.dp else 0.dp
 
