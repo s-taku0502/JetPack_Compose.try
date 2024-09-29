@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "JetPack_Compose.try"
 include(":app")
- 
